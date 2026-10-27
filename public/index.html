@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#f9f9f6">
+  <meta name="description" content="A little space for big ideas. Chat privately with your local Ollama models.">
+  <title>Metamorph — A little space for big ideas</title>
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/styles.css">
+  <script src="/app.js" type="module"></script>
+</head>
+<body>
+  <div class="app">
+    <button class="scrim" id="scrim" aria-label="Close navigation" hidden></button>
+    <aside class="sidebar" id="sidebar" aria-label="Conversations">
+      <a class="brand" href="/" aria-label="Metamorph home"><img src="/favicon.svg" alt="" width="34" height="34"><span>metamorph<span class="brand-dot">.</span></span></a>
+      <button class="new-chat" id="new-chat"><span data-icon="plus"></span> New conversation <kbd>Ctrl K</kbd></button>
+      <label class="search"><span data-icon="search"></span><input id="search" type="search" placeholder="Search conversations" aria-label="Search conversations"><span class="search-hint">⌕</span></label>
+      <div class="history-header">YOUR SPACE <span id="history-count">0</span></div>
+      <nav class="history" id="history" aria-label="Chat history"></nav>
+      <div class="sidebar-bottom">
+        <div class="local-card"><span class="local-symbol" data-icon="shield"></span><div><strong>Local by nature.</strong><p>Your models. Your machine.</p></div><span class="tiny-spark">✧</span></div>
+        <button id="settings-button" class="sidebar-setting"><span class="avatar">M</span><span>My workspace<small>Personal space</small></span><span data-icon="settings"></span></button>
+      </div>
+    </aside>
+    <main>
+      <header class="topbar">
+        <div class="topbar-left"><button id="menu-button" class="icon-button mobile-menu" aria-label="Open navigation" aria-expanded="false"><span data-icon="menu"></span></button><span class="breadcrumb">Workspace</span><span class="breadcrumb-slash">/</span><span id="chat-title">New conversation</span></div>
+        <div class="topbar-right"><span class="connection" id="connection"><i></i><span>Connecting</span></span><button class="icon-button" id="theme-button" aria-label="Switch to dark theme" title="Switch theme"><span data-icon="moon"></span></button></div>
+      </header>
+      <div id="error-banner" class="error-banner" role="alert" hidden><span id="error-text"></span><button id="dismiss-error" class="icon-button" aria-label="Dismiss error"><span data-icon="close"></span></button></div>
+      <section class="conversation-scroll" id="conversation-scroll" aria-label="Conversation">
+        <div class="welcome" id="welcome">
+          <div class="welcome-emblem"><img src="/favicon.svg" alt="" width="70" height="70"><span class="emblem-spark">✳</span></div>
+          <div class="eyebrow">A LITTLE SPACE FOR BIG IDEAS</div>
+          <h1>What’s on your mind?</h1>
+          <p class="welcome-description">A fresh perspective, a first draft, a spark of something new.<br>Your local AI is here to help you make it happen.</p>
+          <div class="suggestions">
+            <button class="suggestion" data-prompt="Help me brainstorm a creative side project. Ask me about my interests first."><span class="suggestion-icon peach" data-icon="sparkles"></span><strong>Find a little inspiration</strong><span>Turn a what-if into what’s next.</span><span class="suggestion-arrow" data-icon="arrow"></span></button>
+            <button class="suggestion" data-prompt="Help me write something that sounds like me. Ask me what I am writing and who it is for."><span class="suggestion-icon sage" data-icon="pen"></span><strong>Make words work</strong><span>A first draft, minus the blank page.</span><span class="suggestion-arrow" data-icon="arrow"></span></button>
+            <button class="suggestion" data-prompt="Help me understand a complex topic in simple terms. Ask me what I would like to learn."><span class="suggestion-icon lavender" data-icon="book"></span><strong>Untangle an idea</strong><span>Less confusion. More lightbulbs.</span><span class="suggestion-arrow" data-icon="arrow"></span></button>
+            <button class="suggestion" data-prompt="Be my coding partner. Help me work through a programming problem step by step. Ask me what I am building."><span class="suggestion-icon sand" data-icon="code"></span><strong>Build something good</strong><span>A coding partner in your corner.</span><span class="suggestion-arrow" data-icon="arrow"></span></button>
+          </div>
+          <div class="welcome-note"><span data-icon="leaf"></span> Powered by your curiosity. Running on your machine.</div>
+        </div>
+        <div class="messages" id="messages" role="log" aria-label="Messages" aria-live="polite"></div>
+      </section>
+      <div class="composer-area">
+        <div class="composer-wrap">
+          <form id="chat-form" class="composer">
+            <label class="sr-only" for="prompt">Message Metamorph</label>
+            <textarea id="prompt" placeholder="Let your thoughts take shape…" rows="1" maxlength="100000"></textarea>
+            <div class="composer-bottom"><div class="model-picker"><span data-icon="cpu"></span><label class="sr-only" for="model">Ollama model</label><select id="model" aria-label="Ollama model"><option value="">Loading models…</option></select></div><div class="composer-actions"><span class="enter-hint">Enter to send</span><button type="submit" id="send-button" class="send-button" aria-label="Send message" disabled><span data-icon="arrowUp"></span></button></div></div>
+          </form>
+          <div class="composer-caption"><span><span class="privacy-dot"></span>Private by design. No cloud AI.</span><span>AI can make mistakes. Stay curious.</span></div>
+        </div>
+      </div>
+    </main>
+  </div>
+  <dialog id="settings-dialog">
+    <form method="dialog" class="dialog-header"><div><span class="eyebrow">MAKE IT YOURS</span><h2>Workspace settings</h2></div><button class="icon-button" aria-label="Close settings"><span data-icon="close"></span></button></form>
+    <label class="field-label" for="system-prompt">System instructions</label><p class="field-help">Give your AI a little direction. Applies to your next message.</p>
+    <textarea id="system-prompt" rows="4" maxlength="20000" placeholder="e.g. Be concise, thoughtful, and explain your reasoning."></textarea>
+    <div class="range-label"><label class="field-label" for="temperature">Creativity</label><output id="temperature-value">0.7</output></div><input id="temperature" type="range" min="0" max="2" step="0.1" value="0.7"><div class="range-caption"><span>More focused</span><span>More adventurous</span></div>
+    <p class="settings-note">Conversations are saved in this browser, not on the server. Anyone using this browser profile can see them. Clearing site data removes them.</p>
+    <div class="settings-footer"><button class="text-button danger" id="clear-history">Clear conversations</button><button class="text-button" id="logout" hidden>Sign out</button><button class="primary-button" id="save-settings">Save changes</button></div>
+  </dialog>
+  <dialog id="login-dialog" aria-labelledby="login-title">
+    <img src="/favicon.svg" alt="" width="48" height="48"><h2 id="login-title">Your space awaits.</h2><p class="field-help">Enter your workspace password to connect.</p>
+    <form id="login-form"><label class="field-label" for="password">Password</label><input type="password" id="password" autocomplete="current-password" required><p id="login-error" role="alert"></p><button class="primary-button" type="submit">Open workspace <span data-icon="arrow"></span></button></form>
+  </dialog>
+  <div class="toast" id="toast" role="status" hidden></div>
+</body>
+</html>
